@@ -67,17 +67,21 @@ class SpannableGridCellView extends StatelessWidget {
         if (editingStrategy.exitOnTap) {
           result = GestureDetector(
             onTap: onExitEditing,
-            onTapDown: (details) => onDragStarted(details.localPosition),
-            child: result,
+            child: Listener(
+              onPointerDown: (details) => onDragStarted(details.localPosition),
+              child: result,
+            ),
           );
         }
         result = Draggable<SpannableGridCellData>(
           child: result,
           maxSimultaneousDrags: 1,
-          feedback: SizedBox(
-            width: size.width,
-            height: size.height,
-            child: result,
+          feedback: Material(
+            child: SizedBox(
+              width: size.width,
+              height: size.height,
+              child: result,
+            ),
           ),
           childWhenDragging: const SizedBox.shrink(),
           data: data,

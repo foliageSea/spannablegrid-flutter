@@ -14,6 +14,7 @@ and rows and supports moving cells inside the grid.
 - Supports editing mode, in which cells can be moved inside the grid to available places 
 - Various editing strategies
 - Styling the grid and its cells
+- **🆕 JSON Import/Export** - Save and load grid layouts as JSON data
 
 ## Usage
 
@@ -114,6 +115,37 @@ The following options are supported:
 | `spacing`  | A space between gird cells.  |
 
 When the `showGrid` parameter is `true` the grid's structure is always visible. Otherwise it appears only in the editing mode.
+
+#### JSON Import/Export
+
+**New in v0.4.0**: SpannableGrid now supports saving and loading layouts as JSON data.
+
+```dart
+// Export current layout to JSON
+String jsonData = spannableGrid.exportToJson();
+
+// Import layout from JSON
+Map<String, dynamic> layoutData = SpannableGrid.importFromJson(jsonData);
+List<SpannableGridCellData> importedCells = layoutData['cells'];
+
+// Using the utility class for advanced features
+final layout = SpannableGridLayout(
+  columns: 4,
+  rows: 3,
+  cells: cells,
+  metadata: {'name': 'My Layout'},
+);
+
+// Export with validation
+String jsonString = layout.toJson();
+ValidationResult result = layout.validate();
+
+if (result.isValid) {
+  print('Layout is valid! Occupancy: ${(result.occupancyRate * 100).toStringAsFixed(1)}%');
+}
+```
+
+For detailed documentation and examples, see [JSON Import/Export Guide](JSON_IMPORT_EXPORT.md).
 
 #### Full example
 

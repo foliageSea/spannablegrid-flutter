@@ -1,3 +1,25 @@
+## [0.4.0] - *2025-09-03*
+
+**NEW FEATURES:**
+* ✨ **JSON Import/Export**: Added comprehensive support for exporting and importing grid layouts as JSON
+  * `exportToJson()` method in SpannableGrid for layout export
+  * `importFromJson()` static method for layout import
+  * `toJson()` and `fromJson()` methods in SpannableGridCellData
+  * `copyWith()` method in SpannableGridCellData for creating copies
+* 📦 **SpannableGridLayoutUtils**: New utility class with advanced layout management
+  * Layout validation with detailed error reporting
+  * Layout merging capabilities
+  * Export with custom metadata support
+* 🏗️ **SpannableGridLayout**: New data class representing complete grid layouts
+* 🔍 **ValidationResult**: Comprehensive layout validation with errors, warnings, and occupancy rate
+* 📝 **Enhanced Documentation**: Complete JSON import/export guide and examples
+* 🛠️ **Command Line Tool**: Layout management tool for JSON operations
+
+**IMPROVEMENTS:**
+* Better error handling for malformed JSON data
+* Support for layout metadata and versioning
+* Extensive test coverage for new features
+
 ## [0.3.0] - *2022-01-18*
 
 **BREAKING!**

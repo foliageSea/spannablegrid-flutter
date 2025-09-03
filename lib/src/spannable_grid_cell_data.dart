@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'dart:convert';
 
 /// A metadata that defines an item (cell) of [SpannableGrid].
 ///
@@ -54,4 +55,47 @@ class SpannableGridCellData {
   int row;
   int columnSpan;
   int rowSpan;
+
+  /// 将单元格数据转换为 JSON Map
+  /// 注意：由于 Widget 无法序列化，只导出布局信息，不包含 child
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id.toString(),
+      'column': column,
+      'row': row,
+      'columnSpan': columnSpan,
+      'rowSpan': rowSpan,
+    };
+  }
+
+  /// 从 JSON Map 创建单元格数据
+  /// 注意：child 需要在创建后单独设置
+  static SpannableGridCellData fromJson(Map<String, dynamic> json) {
+    return SpannableGridCellData(
+      id: json['id'],
+      column: json['column'],
+      row: json['row'],
+      columnSpan: json['columnSpan'] ?? 1,
+      rowSpan: json['rowSpan'] ?? 1,
+    );
+  }
+
+  /// 创建单元格数据的副本
+  SpannableGridCellData copyWith({
+    Object? id,
+    Widget? child,
+    int? column,
+    int? row,
+    int? columnSpan,
+    int? rowSpan,
+  }) {
+    return SpannableGridCellData(
+      id: id ?? this.id,
+      child: child ?? this.child,
+      column: column ?? this.column,
+      row: row ?? this.row,
+      columnSpan: columnSpan ?? this.columnSpan,
+      rowSpan: rowSpan ?? this.rowSpan,
+    );
+  }
 }

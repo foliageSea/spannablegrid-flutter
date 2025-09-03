@@ -1,163 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:spannable_grid/spannable_grid.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(const MainApp());
+}
 
-class MyApp extends StatelessWidget {
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SpannableGrid Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-        accentColor: Colors.amber,
-      ),
-      home: MyHomePage(title: 'SpannableGrid Demo'),
-    );
+    return MaterialApp(theme: Theme.of(context), home: HomePage());
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  bool _singleCell = false;
+class _HomePageState extends State<HomePage> {
+  final cells = <SpannableGridCellData>[];
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SpannableGrid(
-              columns: 4,
-              rows: 4,
-              cells: _getCells(),
-              onCellChanged: (cell) { print('Cell ${cell.id} changed'); },
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextButton(
-                child: Text('Change'),
-                onPressed: () {
-                  setState(() {
-                    _singleCell = !_singleCell;
-                  });
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  List<SpannableGridCellData> _getCells() {
-    var result = <SpannableGridCellData>[];
-    if (_singleCell) {
-      result.add(SpannableGridCellData(
-        column: 1,
-        row: 1,
-        columnSpan: 4,
-        rowSpan: 4,
-        id: "Test Cell 1",
-        child: Container(
-          color: Colors.lime,
-          child: Center(
-            child: Text("Tile 4x4",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
-            ),
-          ),
-        ),
-      ));
-    }
-    else {
-      result.add(SpannableGridCellData(
+  void initState() {
+    super.initState();
+    cells.add(
+      SpannableGridCellData(
         column: 1,
         row: 1,
         columnSpan: 2,
         rowSpan: 2,
         id: "Test Cell 1",
         child: Container(
-          color: Colors.lime,
-          child: Center(
-            child: Text("Tile 2x2",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
-            ),
-          ),
+          color: Colors.lightBlue,
+          child: Center(child: Text("Tile 2x2")),
         ),
-      ));
-      result.add(SpannableGridCellData(
+      ),
+    );
+    cells.add(
+      SpannableGridCellData(
         column: 4,
         row: 1,
         columnSpan: 1,
         rowSpan: 1,
         id: "Test Cell 2",
         child: Container(
-          color: Colors.lime,
-          child: Center(
-            child: Text("Tile 1x1",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
+          color: Colors.lightBlue,
+          child: Center(child: Text("Tile 1x1")),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SizedBox(
+        height: 300,
+        child: SpannableGrid(
+          columns: 8,
+          rows: 2,
+          cells: cells,
+          editingStrategy: const SpannableGridEditingStrategy(),
+          onCellChanged: (cell) {
+            print('Cell ${cell?.id} changed');
+          },
+          gridSize: SpannableGridSize.parentWidth,
+          style: SpannableGridStyle(
+            selectedCellDecoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).primaryColor.withValues(alpha: 0.6),
+                width: 4.0,
+              ),
             ),
           ),
         ),
-      ));
-      result.add(SpannableGridCellData(
-        column: 1,
-        row: 4,
-        columnSpan: 3,
-        rowSpan: 1,
-        id: "Test Cell 3",
-        child: Container(
-          color: Colors.lightBlueAccent,
-          child: Center(
-            child: Text("Tile 3x1",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
-            ),
-          ),
-        ),
-      ));
-      result.add(SpannableGridCellData(
-        column: 4,
-        row: 3,
-        columnSpan: 1,
-        rowSpan: 2,
-        id: "Test Cell 4",
-        child: Container(
-          color: Colors.lightBlueAccent,
-          child: Center(
-            child: Text("Tile 1x2",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
-            ),
-          ),
-        ),
-      ));
-    }
-    return result;
+      ),
+    );
   }
 }

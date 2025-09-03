@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'dart:convert';
 
 import 'spannable_grid_cell_data.dart';
 import 'spannable_grid_cell_view.dart';
@@ -108,6 +109,53 @@ class SpannableGrid extends StatefulWidget {
   /// Defaults to 'false'.
   ///
   final bool showGrid;
+
+  /// 将当前网格布局导出为 JSON 字符串
+  /// 返回包含网格尺寸和所有单元格布局信息的 JSON 字符串
+  String exportToJson() {
+    final layoutData = {
+      'columns': columns,
+      'rows': rows,
+      'cells': cells.map((cell) => cell.toJson()).toList(),
+      'version': '1.0',
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    };
+    return jsonEncode(layoutData);
+  }
+
+  /// 从 JSON 字符串导入网格布局
+  /// 注意：这只会返回布局信息，Widget child 需要由调用者根据需要设置
+  /// 返回 Map 包含 'columns'、'rows' 和 'cells' 键
+  static Map<String, dynamic> importFromJson(String jsonString) {
+    try {
+      final jsonData = jsonDecode(jsonString) as Map<String, dynamic>;
+
+      if (!jsonData.containsKey('columns') ||
+          !jsonData.containsKey('rows') ||
+          !jsonData.containsKey('cells')) {
+        throw FormatException('无效的 JSON 格式：缺少必要的字段');
+      }
+
+      final columns = jsonData['columns'] as int;
+      final rows = jsonData['rows'] as int;
+      final cellsData = jsonData['cells'] as List<dynamic>;
+
+      final cells = cellsData
+          .map((cellJson) =>
+              SpannableGridCellData.fromJson(cellJson as Map<String, dynamic>))
+          .toList();
+
+      return {
+        'columns': columns,
+        'rows': rows,
+        'cells': cells,
+        'version': jsonData['version'],
+        'timestamp': jsonData['timestamp'],
+      };
+    } catch (e) {
+      throw FormatException('解析 JSON 时出错：$e');
+    }
+  }
 
   @override
   _SpannableGridState createState() => _SpannableGridState();

@@ -5,3 +5,4 @@ library spannable_grid;
 export 'src/spannable_grid.dart';
 export 'src/spannable_grid_cell_data.dart';
 export 'src/spannable_grid_options.dart';
+export 'src/spannable_grid_layout_utils.dart';

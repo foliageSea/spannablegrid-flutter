@@ -193,17 +193,24 @@ class _SpannableGridState extends State<SpannableGrid> {
   @override
   Widget build(BuildContext context) {
     return _constrainGrid(
-      child: CustomMultiChildLayout(
-        delegate: SpannableGridDelegate(
-            cells: _cells,
-            columns: widget.columns,
-            rows: widget.rows,
-            spacing: widget.style.spacing,
-            gridSize: widget.gridSize,
-            onCellSizeCalculated: (size) {
-              _cellSize = size;
-            }),
-        children: _children,
+      child: GestureDetector(
+        onTap: () {
+          if (_isEditing) {
+            _onExitEditing();
+          }
+        },
+        child: CustomMultiChildLayout(
+          delegate: SpannableGridDelegate(
+              cells: _cells,
+              columns: widget.columns,
+              rows: widget.rows,
+              spacing: widget.style.spacing,
+              gridSize: widget.gridSize,
+              onCellSizeCalculated: (size) {
+                _cellSize = size;
+              }),
+          children: _children,
+        ),
       ),
     );
   }
